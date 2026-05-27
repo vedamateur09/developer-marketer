@@ -1,0 +1,80 @@
+/* Scoped to .developer-mode wrapper */
+.developer-mode {
+  background-color: #0D1117;
+  min-height: 100vh;
+  color: #E6EDF3;
+  position: relative;
+}
+
+.developer-mode::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: radial-gradient(circle, #30363D 1px, transparent 1px);
+  background-size: 24px 24px;
+  opacity: 0.45;
+}
+
+.developer-mode > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* React Flow overrides */
+.developer-mode .react-flow__renderer {
+  background: transparent;
+}
+
+.developer-mode .react-flow__background {
+  display: none;
+}
+
+.developer-mode .react-flow__edge-path {
+  stroke-dasharray: 5, 5;
+}
+
+.developer-mode .react-flow__edge-path--animated {
+  animation: dashFlow 1.5s linear infinite;
+}
+
+@keyframes dashFlow {
+  from { stroke-dashoffset: 10; }
+  to   { stroke-dashoffset: 0; }
+}
+
+/* Code file cards */
+.dev-code-card {
+  background: #161B22;
+  border: 1px solid #30363D;
+  border-radius: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  line-height: 1.6;
+  transition: box-shadow 0.2s ease;
+}
+
+.dev-code-card:hover {
+  box-shadow: 0 0 20px rgba(0, 255, 135, 0.12);
+}
+
+.dev-code-card .file-tab {
+  background: #0D1117;
+  border-bottom: 1px solid #30363D;
+  padding: 6px 14px;
+  font-size: 0.72rem;
+  color: #8B949E;
+  border-radius: 6px 6px 0 0;
+}
+
+/* Syntax token colours */
+.token-keyword  { color: #FF7B72; }
+.token-string   { color: #A5D6FF; }
+.token-comment  { color: #8B949E; font-style: italic; }
+.token-number   { color: #79C0FF; }
+.token-fn       { color: #D2A8FF; }
+.token-var      { color: #FFA657; }
+.token-op       { color: #E6EDF3; }
+.token-prop     { color: #79C0FF; }
+.token-value    { color: #A5D6FF; }

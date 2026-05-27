@@ -1,0 +1,83 @@
+/* Scoped to .marketeer-mode wrapper */
+.marketeer-mode {
+  background-color: #F5F0E8;
+  min-height: 100vh;
+}
+
+.marketeer-mode * {
+  cursor: none;
+}
+
+@media (hover: none) {
+  .marketeer-mode * {
+    cursor: auto;
+  }
+  #mk-cursor {
+    display: none;
+  }
+}
+
+#mk-cursor {
+  position: fixed;
+  width: 36px;
+  height: 36px;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.05s ease;
+}
+
+.mk-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.45;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+.mk-grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.035;
+  width: 200%;
+  height: 200%;
+  top: -50%;
+  left: -50%;
+}
+
+.mk-card {
+  background: #fff;
+  border: 1.5px solid #1A1A1A;
+  transition: box-shadow 0.2s ease;
+}
+
+.mk-card:hover {
+  box-shadow: 6px 6px 0 #1A1A1A;
+}
+
+.mk-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  background: #1A1A1A;
+  color: #F5F0E8;
+  padding: 2px 8px;
+  border-radius: 2px;
+  letter-spacing: 0.05em;
+}
+
+.film-perforations {
+  background-image:
+    radial-gradient(circle, #333 3px, transparent 3px),
+    radial-gradient(circle, #333 3px, transparent 3px);
+  background-size: 24px 100%, 24px 100%;
+  background-position: 0 6px, 0 calc(100% - 6px);
+  background-repeat: repeat-x;
+}
+
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
