@@ -1,106 +1,43 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
+import Lenis from '@studio-freight/lenis'
 import Toggle from './components/Toggle'
 import MarketeerMode from './components/MarketeerMode'
 import DeveloperMode from './components/DeveloperMode'
 
-/* ─── Glitch transition overlay (Marketeer → Developer) ─── */
-function GlitchTransition({ onComplete }) {
-  const prefersReduced = useReducedMotion()
-  const [text, setText] = useState('')
-  const MSG = '> switching_to_dev_mode... ✓'
-
+/* ─── E1: Smooth scroll ─── */
+function useSmoothScroll() {
   useEffect(() => {
-    if (prefersReduced) { onComplete(); return }
-
-    let i = 0
-    const t = setInterval(() => {
-      setText(MSG.slice(0, i + 1))
-      i++
-      if (i >= MSG.length) {
-        clearInterval(t)
-        setTimeout(onComplete, 400)
-      }
-    }, 40)
-    return () => clearInterval(t)
-  }, [prefersReduced])
-
-  const layers = [
-    { bg: '#fff', delay: 0, duration: 0.25 },
-    { bg: '#000', delay: 0.08, duration: 0.28 },
-    { bg: '#0D1117', delay: 0.16, duration: 0.35 },
-  ]
-
-  return (
-    <div className="fixed inset-0 z-50 overflow-hidden pointer-events-none">
-      {layers.map((l, i) => (
-        <motion.div
-          key={i}
-          className="absolute inset-0 origin-left"
-          style={{ background: l.bg }}
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: [0, 1, 1, 0] }}
-          transition={{
-            duration: l.duration * 2,
-            delay: l.delay,
-            times: [0, 0.4, 0.6, 1],
-            ease: 'easeInOut',
-          }}
-        />
-      ))}
-
-      {/* Terminal boot text */}
-      <div
-        className="absolute inset-0 flex items-center justify-center"
-        style={{ zIndex: 10 }}
-      >
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-          style={{
-            fontFamily: '"JetBrains Mono", monospace',
-            fontSize: '1.1rem',
-            color: '#00FF87',
-            background: '#0D1117',
-            padding: '12px 24px',
-            borderRadius: '6px',
-            border: '1px solid #30363D',
-          }}
-        >
-          {text}
-          {text.length < MSG.length && (
-            <span className="animate-cursor-blink">█</span>
-          )}
-        </motion.div>
-      </div>
-    </div>
-  )
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    })
+    const raf = (time) => { lenis.raf(time); requestAnimationFrame(raf) }
+    requestAnimationFrame(raf)
+    return () => lenis.destroy()
+  }, [])
 }
 
-/* ─── Ink bleed transition overlay (Developer → Marketeer) ─── */
-function InkTransition({ onComplete }) {
-  const prefersReduced = useReducedMotion()
-
-  useEffect(() => {
-    if (prefersReduced) { onComplete(); return }
-  }, [prefersReduced])
-
-  if (prefersReduced) return null
+/* ─── E3: Screen-split curtain transition ─── */
+function SplitCurtain({ isClosing, destMode }) {
+  const bg = destMode === 'developer' ? '#0D1117' : '#F5F0E8'
+  const ease = [0.76, 0, 0.24, 1]
 
   return (
-    <motion.div
-      className="fixed inset-0 z-50 pointer-events-none"
-      style={{
-        background: '#FFE500',
-        filter: 'url(#ink-filter)',
-      }}
-      initial={{ clipPath: 'circle(0% at 50% 50%)' }}
-      animate={{ clipPath: 'circle(150% at 50% 50%)' }}
-      exit={{ clipPath: 'circle(150% at 50% 50%)' }}
-      transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
-      onAnimationComplete={onComplete}
-    />
+    <div style={{ position: 'fixed', inset: 0, zIndex: 9000, display: 'flex', pointerEvents: 'none' }}>
+      <motion.div
+        initial={{ x: '-100%' }}
+        animate={{ x: isClosing ? '0%' : '-100%' }}
+        transition={{ duration: 0.55, ease }}
+        style={{ width: '50%', height: '100%', background: bg }}
+      />
+      <motion.div
+        initial={{ x: '100%' }}
+        animate={{ x: isClosing ? '0%' : '100%' }}
+        transition={{ duration: 0.55, ease }}
+        style={{ width: '50%', height: '100%', background: bg }}
+      />
+    </div>
   )
 }
 
@@ -150,36 +87,50 @@ function Nav({ mode, onToggle, disabled }) {
 
 /* ─── Root App ─── */
 export default function App() {
-  const [mode, setMode] = useState('marketeer')
-  const [isTransitioning, setIsTransitioning] = useState(false)
+  useSmoothScroll()
+  const prefersReduced = useReducedMotion()
+
+  const [displayedMode, setDisplayedMode] = useState('marketeer')
   const [pendingMode, setPendingMode] = useState(null)
+  const [phase, setPhase] = useState('idle') // 'idle' | 'closing' | 'opening'
 
   function handleToggle(newMode) {
-    if (newMode === mode || isTransitioning) return
-    setIsTransitioning(true)
+    if (newMode === displayedMode || phase !== 'idle') return
+
+    if (prefersReduced) {
+      setDisplayedMode(newMode)
+      return
+    }
+
     setPendingMode(newMode)
+    setPhase('closing')
+
+    setTimeout(() => {
+      setDisplayedMode(newMode)
+      setPhase('opening')
+      setTimeout(() => {
+        setPhase('idle')
+        setPendingMode(null)
+      }, 600)
+    }, 600)
   }
 
-  function handleTransitionComplete() {
-    if (pendingMode) setMode(pendingMode)
-    setPendingMode(null)
-    setIsTransitioning(false)
-  }
+  const isTransitioning = phase !== 'idle'
 
   return (
     <>
-      <Nav mode={mode} onToggle={handleToggle} disabled={isTransitioning} />
+      <Nav mode={displayedMode} onToggle={handleToggle} disabled={isTransitioning} />
 
-      {/* Transition overlays — outside AnimatePresence so they layer over both modes */}
-      {isTransitioning && pendingMode === 'developer' && (
-        <GlitchTransition onComplete={handleTransitionComplete} />
-      )}
-      {isTransitioning && pendingMode === 'marketeer' && (
-        <InkTransition onComplete={handleTransitionComplete} />
+      {/* Screen-split curtain — shown during both closing and opening phases */}
+      {isTransitioning && (
+        <SplitCurtain
+          isClosing={phase === 'closing'}
+          destMode={pendingMode || displayedMode}
+        />
       )}
 
       <AnimatePresence mode="wait">
-        {mode === 'marketeer' ? (
+        {displayedMode === 'marketeer' ? (
           <MarketeerMode key="marketeer" />
         ) : (
           <DeveloperMode key="developer" />

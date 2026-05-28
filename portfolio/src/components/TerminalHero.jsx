@@ -44,7 +44,21 @@ export default function TerminalHero() {
   }, [currentLine, currentChar, prefersReduced])
 
   return (
-    <section className="min-h-screen flex flex-col justify-center px-6 md:px-16 pt-24 pb-12">
+    <section className="min-h-screen flex flex-col justify-center px-6 md:px-16 pt-24 pb-12" style={{ position: 'relative' }}>
+      {/* E12: Vercel-style PostHog orange glow behind terminal */}
+      <div
+        style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: '600px',
+          height: '400px',
+          background: 'radial-gradient(ellipse at center, rgba(245,78,0,0.08) 0%, transparent 70%)',
+          pointerEvents: 'none',
+          zIndex: 0,
+        }}
+      />
       <div
         className="rounded-lg p-6 md:p-8 max-w-2xl"
         style={{
@@ -53,6 +67,8 @@ export default function TerminalHero() {
           fontFamily: '"JetBrains Mono", monospace',
           fontSize: '0.85rem',
           lineHeight: 1.8,
+          position: 'relative',
+          zIndex: 1,
         }}
       >
         {/* Terminal header dots */}
@@ -88,7 +104,7 @@ export default function TerminalHero() {
 
       <p
         className="mt-8 text-lg max-w-xl"
-        style={{ fontFamily: 'Inter, sans-serif', color: '#8B949E' }}
+        style={{ fontFamily: 'Inter, sans-serif', color: '#8B949E', position: 'relative', zIndex: 1 }}
       >
         I build the systems. Then I explain why they matter.
       </p>

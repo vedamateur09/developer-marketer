@@ -3,6 +3,10 @@ import { Mail, ExternalLink } from 'lucide-react'
 import TerminalHero from './TerminalHero'
 import ArchitectureDiagram from './ArchitectureDiagram'
 import PostHogWidget from './PostHogWidget'
+import ProgressBar from './ProgressBar'
+import TechMarquee from './TechMarquee'
+import FadeInSection from './FadeInSection'
+import MagneticButton from './MagneticButton'
 
 /* ─── Use Case Cards ─── */
 const USE_CASES = [
@@ -100,7 +104,7 @@ function CodeLine({ parts }) {
   )
 }
 
-function CodeCard({ filename, title, tags, code }) {
+function CodeCard({ filename, tags, code }) {
   return (
     <div className="dev-code-card flex flex-col">
       <div className="file-tab font-jetbrains text-xs flex items-center gap-2">
@@ -110,9 +114,7 @@ function CodeCard({ filename, title, tags, code }) {
       <div className="p-4 flex-1 space-y-0.5">
         {code.map((line, i) => {
           if (line.type === 'blank') return <div key={i} className="h-2" />
-          if (line.type === 'comment') {
-            return <div key={i} className="token-comment">{line.text}</div>
-          }
+          if (line.type === 'comment') return <div key={i} className="token-comment">{line.text}</div>
           return <CodeLine key={i} parts={line.parts} />
         })}
       </div>
@@ -121,12 +123,7 @@ function CodeCard({ filename, title, tags, code }) {
           <span
             key={tag}
             className="text-xs px-2 py-0.5 rounded"
-            style={{
-              fontFamily: '"JetBrains Mono", monospace',
-              background: '#0D1117',
-              color: '#8B949E',
-              border: '1px solid #30363D',
-            }}
+            style={{ fontFamily: '"JetBrains Mono", monospace', background: '#0D1117', color: '#8B949E', border: '1px solid #30363D' }}
           >
             {tag}
           </span>
@@ -139,10 +136,7 @@ function CodeCard({ filename, title, tags, code }) {
 /* ─── Dev Footer ─── */
 function DevFooter() {
   return (
-    <footer
-      className="relative px-6 md:px-16 py-16"
-      style={{ borderTop: '1px solid #30363D', zIndex: 1 }}
-    >
+    <footer className="relative px-6 md:px-16 py-16" style={{ borderTop: '1px solid #30363D', zIndex: 1 }}>
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 items-start">
         <div>
           <p className="font-bold text-lg mb-1" style={{ fontFamily: '"JetBrains Mono", monospace', color: '#E6EDF3' }}>
@@ -167,30 +161,36 @@ function DevFooter() {
           ))}
         </div>
 
+        {/* E7: Magnetic contact links */}
         <div className="flex flex-col gap-3">
-          <a
+          <MagneticButton
             href="mailto:[YOUR_EMAIL]"
-            className="flex items-center gap-2 text-sm transition-colors hover:text-white"
-            style={{ fontFamily: 'Inter, sans-serif', color: '#8B949E' }}
+            style={{
+              display: 'flex', alignItems: 'center', gap: '8px',
+              fontSize: '0.875rem', color: '#8B949E', fontFamily: 'Inter, sans-serif',
+              textDecoration: 'none', background: 'transparent', border: 'none', padding: 0,
+            }}
+            strength={0.2}
           >
             <Mail size={15} /> [YOUR_EMAIL]
-          </a>
-          <a
+          </MagneticButton>
+          <MagneticButton
             href="[YOUR_LINKEDIN_URL]"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 text-sm transition-colors hover:text-white"
-            style={{ fontFamily: 'Inter, sans-serif', color: '#8B949E' }}
+            style={{
+              display: 'flex', alignItems: 'center', gap: '8px',
+              fontSize: '0.875rem', color: '#8B949E', fontFamily: 'Inter, sans-serif',
+              textDecoration: 'none', background: 'transparent', border: 'none', padding: 0,
+            }}
+            strength={0.2}
           >
             <ExternalLink size={15} /> LinkedIn
-          </a>
+          </MagneticButton>
         </div>
       </div>
 
-      <p
-        className="text-center mt-12 text-xs"
-        style={{ fontFamily: '"JetBrains Mono", monospace', color: '#30363D' }}
-      >
+      <p className="text-center mt-12 text-xs" style={{ fontFamily: '"JetBrains Mono", monospace', color: '#30363D' }}>
         Built to apply for one specific job. No regrets.
       </p>
     </footer>
@@ -200,8 +200,8 @@ function DevFooter() {
 /* ─── Main export ─── */
 const modeVariants = {
   initial: { opacity: 0 },
-  animate: { opacity: 1, transition: { duration: 0.35 } },
-  exit: { opacity: 0, y: 20, transition: { duration: 0.25 } },
+  animate: { opacity: 1, transition: { duration: 0.2 } },
+  exit: { opacity: 0, transition: { duration: 0.15 } },
 }
 
 export default function DeveloperMode() {
@@ -213,27 +213,39 @@ export default function DeveloperMode() {
       exit="exit"
       className="developer-mode"
     >
+      {/* E2: Reading progress bar — PostHog orange */}
+      <ProgressBar color="#F54E00" />
+
       <TerminalHero />
 
-      {/* Use Case Cards */}
-      <section className="px-6 md:px-16 py-16" style={{ position: 'relative', zIndex: 1 }}>
-        <div className="max-w-6xl mx-auto">
-          <span
-            className="text-xs font-bold tracking-widest uppercase block mb-8"
-            style={{ fontFamily: '"JetBrains Mono", monospace', color: '#8B949E' }}
-          >
-            // use cases
-          </span>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {USE_CASES.map(uc => (
-              <CodeCard key={uc.filename} {...uc} />
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* E8: Platform marquee ticker */}
+      <TechMarquee />
 
-      <ArchitectureDiagram />
-      <DevFooter />
+      {/* E9: Scroll-reveal use cases */}
+      <FadeInSection delay={0}>
+        <section className="px-6 md:px-16 py-16" style={{ position: 'relative', zIndex: 1 }}>
+          <div className="max-w-6xl mx-auto">
+            <span
+              className="text-xs font-bold tracking-widest uppercase block mb-8"
+              style={{ fontFamily: '"JetBrains Mono", monospace', color: '#8B949E' }}
+            >
+              // use cases
+            </span>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {USE_CASES.map(uc => <CodeCard key={uc.filename} {...uc} />)}
+            </div>
+          </div>
+        </section>
+      </FadeInSection>
+
+      <FadeInSection delay={0.1}>
+        <ArchitectureDiagram />
+      </FadeInSection>
+
+      <FadeInSection delay={0}>
+        <DevFooter />
+      </FadeInSection>
+
       <PostHogWidget />
     </motion.div>
   )

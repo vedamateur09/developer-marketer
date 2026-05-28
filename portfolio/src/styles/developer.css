@@ -56,7 +56,8 @@
 }
 
 .dev-code-card:hover {
-  box-shadow: 0 0 20px rgba(0, 255, 135, 0.12);
+  box-shadow: 0 0 0 1px #F54E00, 0 8px 32px rgba(245, 78, 0, 0.12);
+  border-color: #F54E00;
 }
 
 .dev-code-card .file-tab {
