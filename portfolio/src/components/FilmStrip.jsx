@@ -46,7 +46,7 @@ export default function FilmStrip() {
 
   return (
     <section className="py-16 overflow-hidden" style={{ background: '#1A1A1A' }}>
-      <div className="mb-6 px-8 md:px-16">
+      <div className="mb-6 px-6 md:px-16">
         <span
           className="text-xs font-bold tracking-widest uppercase"
           style={{ fontFamily: '"Space Mono", monospace', color: '#FFE500' }}

@@ -45,7 +45,7 @@ function SplitCurtain({ isClosing, destMode }) {
 function Nav({ mode, onToggle, disabled }) {
   return (
     <nav
-      className="fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-6 md:px-10 py-4"
+      className="fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-6 md:px-16 py-4"
       style={{
         background: mode === 'marketeer' ? 'rgba(245,240,232,0.85)' : 'rgba(13,17,23,0.85)',
         borderBottom: mode === 'developer' ? '1px solid #30363D' : 'none',
@@ -133,13 +133,15 @@ export default function App() {
         />
       )}
 
-      <AnimatePresence mode="wait">
-        {displayedMode === 'marketeer' ? (
-          <MarketeerMode key="marketeer" />
-        ) : (
-          <DeveloperMode key="developer" />
-        )}
-      </AnimatePresence>
+      <div style={{ maxWidth: '1440px', marginLeft: 'auto', marginRight: 'auto', position: 'relative' }}>
+        <AnimatePresence mode="wait">
+          {displayedMode === 'marketeer' ? (
+            <MarketeerMode key="marketeer" />
+          ) : (
+            <DeveloperMode key="developer" />
+          )}
+        </AnimatePresence>
+      </div>
     </>
   )
 }

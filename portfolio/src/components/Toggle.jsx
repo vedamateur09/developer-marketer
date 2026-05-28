@@ -1,53 +1,68 @@
-import { motion } from 'framer-motion'
-
-const MODES = ['marketeer', 'developer']
+import { motion, useReducedMotion } from 'framer-motion'
 
 export default function Toggle({ mode, onToggle, disabled }) {
+  const prefersReduced = useReducedMotion()
+  const isDev = mode === 'developer'
+
+  const labelColor = isDev ? '#8B949E' : '#1A1A1A'
+  const trackBg = isDev ? '#F54E00' : 'rgba(26,26,26,0.15)'
+  const knobX = isDev ? 24 : 2
+
   return (
-    <div
-      role="tablist"
-      aria-label="Switch between Marketeer and Developer mode"
-      className="relative flex items-center rounded-full p-1 gap-0"
-      style={{
-        background: mode === 'marketeer' ? 'rgba(26,26,26,0.08)' : 'rgba(255,255,255,0.06)',
-        border: mode === 'marketeer' ? '1.5px solid rgba(26,26,26,0.15)' : '1px solid #30363D',
-        backdropFilter: 'blur(12px)',
-      }}
+    <button
+      role="switch"
+      aria-checked={isDev}
+      aria-label="Toggle Developer mode"
+      disabled={disabled}
+      onClick={() => onToggle(isDev ? 'marketeer' : 'developer')}
+      className="flex items-center gap-2.5 disabled:opacity-50 disabled:cursor-not-allowed"
+      style={{ background: 'none', border: 'none', padding: 0, cursor: disabled ? 'not-allowed' : 'pointer' }}
     >
-      {MODES.map((m) => {
-        const isActive = mode === m
-        return (
-          <button
-            key={m}
-            role="tab"
-            aria-selected={isActive}
-            disabled={disabled}
-            onClick={() => onToggle(m)}
-            className="relative px-5 py-2 text-xs font-bold tracking-widest uppercase rounded-full
-                       transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-            style={{
-              color: isActive
-                ? (m === 'marketeer' ? '#1A1A1A' : '#0D1117')
-                : (mode === 'marketeer' ? '#1A1A1A' : '#8B949E'),
-              fontFamily: m === 'marketeer' ? '"Space Mono", monospace' : '"JetBrains Mono", monospace',
-              zIndex: 2,
-            }}
-          >
-            {isActive && (
-              <motion.span
-                layoutId="toggle-pill"
-                className="absolute inset-0 rounded-full"
-                style={{
-                  backgroundColor: m === 'marketeer' ? '#FFE500' : '#F54E00',
-                  zIndex: -1,
-                }}
-                transition={{ type: 'spring', stiffness: 380, damping: 42 }}
-              />
-            )}
-            <span className="relative">{m.toUpperCase()}</span>
-          </button>
-        )
-      })}
-    </div>
+      <span
+        style={{
+          fontFamily: '"JetBrains Mono", monospace',
+          fontSize: '0.7rem',
+          fontWeight: 700,
+          letterSpacing: '0.04em',
+          color: labelColor,
+          transition: 'color 0.2s ease',
+          userSelect: 'none',
+        }}
+      >
+        &lt;/&gt; Dev Mode
+      </span>
+
+      {/* Track */}
+      <span
+        style={{
+          position: 'relative',
+          display: 'inline-flex',
+          alignItems: 'center',
+          width: '48px',
+          height: '26px',
+          borderRadius: '9999px',
+          background: trackBg,
+          border: isDev ? 'none' : '1.5px solid rgba(26,26,26,0.18)',
+          transition: 'background 0.25s ease, border 0.25s ease',
+          flexShrink: 0,
+        }}
+      >
+        <motion.span
+          animate={prefersReduced ? undefined : { x: knobX }}
+          initial={{ x: knobX }}
+          transition={{ type: 'spring', stiffness: 380, damping: 42 }}
+          style={{
+            position: 'absolute',
+            width: '20px',
+            height: '20px',
+            borderRadius: '50%',
+            background: '#fff',
+            boxShadow: '0 1px 4px rgba(0,0,0,0.25)',
+            top: '50%',
+            translateY: '-50%',
+          }}
+        />
+      </span>
+    </button>
   )
 }
