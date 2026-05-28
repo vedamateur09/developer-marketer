@@ -1,6 +1,5 @@
 import { useRef } from 'react'
-import { motion, useAnimation } from 'framer-motion'
-import { useReducedMotion } from 'framer-motion'
+import { motion, useAnimation, useReducedMotion } from 'framer-motion'
 import { FileText, Laugh, ToggleLeft } from 'lucide-react'
 
 const ITEMS = [
@@ -75,10 +74,11 @@ export default function FilmStrip() {
           {ALL_ITEMS.map((item, i) => {
             const Icon = item.icon
             return (
-              <div
+              <motion.div
                 key={i}
                 className="flex-none w-72 bg-white rounded-lg p-6 flex flex-col gap-3"
                 style={{ border: '1px solid #333' }}
+                whileHover={{ y: -4, boxShadow: '0 8px 24px rgba(0,0,0,0.3)', transition: { duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] } }}
               >
                 <div className="flex items-center gap-3">
                   <Icon size={20} color="#1A1A1A" />
@@ -104,7 +104,7 @@ export default function FilmStrip() {
                     {item.linkLabel}
                   </a>
                 )}
-              </div>
+              </motion.div>
             )
           })}
         </motion.div>

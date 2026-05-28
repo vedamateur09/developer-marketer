@@ -108,7 +108,10 @@ function CodeCard({ filename, tags, code }) {
   return (
     <div className="dev-code-card flex flex-col">
       <div className="file-tab font-jetbrains text-xs flex items-center gap-2">
-        <span style={{ color: '#8B949E' }}>📄</span>
+        <svg width="12" height="14" viewBox="0 0 12 14" fill="none" style={{ flexShrink: 0 }}>
+          <path d="M1 1h7l3 3v9H1V1z" stroke="#8B949E" strokeWidth="1" fill="none"/>
+          <path d="M8 1v3h3" stroke="#8B949E" strokeWidth="1" fill="none"/>
+        </svg>
         <span>{filename}</span>
       </div>
       <div className="p-4 flex-1 space-y-0.5">

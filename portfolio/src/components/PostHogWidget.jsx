@@ -94,7 +94,7 @@ export default function PostHogWidget() {
                 borderTop: '1px solid #30363D',
               }}
             >
-              // hi PostHog 👋 — yes, I&apos;ve read your docs.
+              // hi PostHog 👋. Yes, I&apos;ve read your docs.
             </div>
           </motion.div>
         )}

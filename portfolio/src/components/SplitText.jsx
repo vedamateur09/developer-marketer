@@ -1,5 +1,4 @@
-import { motion } from 'framer-motion'
-import { useReducedMotion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 
 export default function SplitText({ text, delay = 0, className, style }) {
   const prefersReduced = useReducedMotion()

@@ -71,7 +71,11 @@ function Nav({ mode, onToggle, disabled }) {
         style={{
           fontFamily: mode === 'marketeer' ? '"Space Mono", monospace' : '"JetBrains Mono", monospace',
           color: mode === 'marketeer' ? '#1A1A1A' : '#8B949E',
+          transition: 'color 0.15s ease',
+          textDecoration: 'none',
         }}
+        onMouseEnter={e => { e.currentTarget.style.color = mode === 'marketeer' ? '#FF4C39' : '#E6EDF3' }}
+        onMouseLeave={e => { e.currentTarget.style.color = mode === 'marketeer' ? '#1A1A1A' : '#8B949E' }}
         onClick={(e) => {
           if (mode === 'developer') {
             e.preventDefault()

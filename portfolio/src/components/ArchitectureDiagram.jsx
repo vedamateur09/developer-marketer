@@ -38,8 +38,7 @@ function makeNode(id, x, y, label, group) {
     style: {
       background: s.bg,
       color: s.color,
-      border: `1px solid ${s.border}`,
-      borderLeft: `3px solid ${s.border}`,
+      border: `1.5px solid ${s.border}`,
       borderRadius: '6px',
       padding: '10px 14px',
       fontSize: '12px',
@@ -178,7 +177,7 @@ export default function ArchitectureDiagram() {
   const onPaneClick = useCallback(() => setTooltip(null), [])
 
   return (
-    <section className="py-12 px-4 md:px-8">
+    <section className="py-16 px-6 md:px-16">
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-6 gap-4">
           <div>

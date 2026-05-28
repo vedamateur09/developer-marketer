@@ -41,7 +41,7 @@ export default function Toggle({ mode, onToggle, disabled }) {
                   backgroundColor: m === 'marketeer' ? '#FFE500' : '#F54E00',
                   zIndex: -1,
                 }}
-                transition={{ type: 'spring', stiffness: 400, damping: 35 }}
+                transition={{ type: 'spring', stiffness: 380, damping: 42 }}
               />
             )}
             <span className="relative">{m.toUpperCase()}</span>

@@ -292,7 +292,7 @@ function WorkHighlights() {
               key={card.num}
               className="mk-card relative p-6 flex flex-col gap-4"
               whileHover={{ y: -8, rotate: 0.8, transition: { duration: 0.2 } }}
-              style={{ borderLeft: `4px solid ${card.accent}` }}
+              style={{ borderTop: `3px solid ${card.accent}`, background: `${card.accent}0C` }}
             >
               <span
                 className="font-bold"

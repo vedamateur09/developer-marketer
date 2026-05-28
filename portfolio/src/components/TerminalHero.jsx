@@ -3,7 +3,7 @@ import { useReducedMotion } from 'framer-motion'
 
 const LINES = [
   { text: '$ whoami', type: 'cmd' },
-  { text: '[YOUR_NAME] — Marketing Technologist @ ZS Associates', type: 'out' },
+  { text: '[YOUR_NAME], Marketing Technologist @ ZS Associates', type: 'out' },
   { text: '$ cat skills.txt', type: 'cmd' },
   { text: 'MarTech Architecture | Campaign Automation | CDP Integration | Analytics Engineering', type: 'out' },
   { text: '$ cat currently_applying_to.txt', type: 'cmd' },
@@ -66,7 +66,7 @@ export default function TerminalHero() {
           border: '1px solid #30363D',
           fontFamily: '"JetBrains Mono", monospace',
           fontSize: '0.85rem',
-          lineHeight: 1.8,
+          lineHeight: 1.65,
           position: 'relative',
           zIndex: 1,
         }}

@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react'
-import { motion } from 'framer-motion'
-import { useReducedMotion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 
 export default function MagneticButton({ children, style, className, onClick, href, target, rel, strength = 0.3 }) {
   const ref = useRef(null)
